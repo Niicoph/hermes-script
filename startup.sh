@@ -32,11 +32,12 @@ echo "  OS: ${ID} ${UBUNTU_CODENAME} (${VERSION_ID})"
 
 # --- 3. Instalar Docker ---
 echo ""
-echo "[1/2] Instalando Docker..."
+echo "[1/3] Instalando Docker..."
 if ! command -v docker &>/dev/null; then
     apt-get update -qq
     apt-get install -y -qq ca-certificates curl
     install -m 0755 -d /etc/apt/keyrings
+    rm -f /etc/apt/sources.list.d/docker.list
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
         -o /etc/apt/keyrings/docker.asc
     chmod a+r /etc/apt/keyrings/docker.asc
@@ -52,9 +53,19 @@ else
     echo "  Docker ya instalado."
 fi
 
-# --- 4. Construir imagen Docker con Teams SDK ---
+# --- 4. Instalar Hermes Agent en la VM ---
 echo ""
-echo "[2/2] Construyendo imagen hermes-agent-teams:latest..."
+echo "[2/3] Instalando Hermes Agent..."
+if ! command -v hermes &>/dev/null; then
+    curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+    echo "  Hermes instalado."
+else
+    echo "  Hermes ya instalado."
+fi
+
+# --- 5. Construir imagen Docker con Teams SDK ---
+echo ""
+echo "[3/3] Construyendo imagen hermes-agent-teams:latest..."
 docker build -t hermes-agent-teams:latest \
     -f "${REPO_DIR}/Dockerfile.hermes-teams" "${REPO_DIR}"
 echo "  Imagen construida."
@@ -69,9 +80,9 @@ echo "    docker run -d \\"
 echo "      --name hermes-gateway \\"
 echo "      --restart unless-stopped \\"
 echo "      --network host \\"
-echo "      -v /opt/data/hermes-home:/opt/data \\"
-echo "      -e HERMES_UID=1000 \\"
-echo "      -e HERMES_GID=1000 \\"
+echo "      -v ~/.hermes:/opt/data \\"
+echo "      -e HERMES_UID=$(id -u) \\"
+echo "      -e HERMES_GID=$(id -g) \\"
 echo "      hermes-agent-teams:latest \\"
 echo "      gateway run"
 echo ""

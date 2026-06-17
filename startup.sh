@@ -53,7 +53,7 @@ else
     echo "  Docker ya instalado."
 fi
 
-# --- 5. Construir imagen Docker con Teams SDK ---
+# --- 4. Construir imagen Docker con Teams SDK ---
 echo ""
 echo "[3/3] Construyendo imagen hermes-agent-teams:latest..."
 docker build -t hermes-agent-teams:latest \

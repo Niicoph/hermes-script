@@ -8,7 +8,6 @@
  
 - Git instalado en la VM
 - Ubuntu 24.04 LTS Minimal (o superior)
-- Docker instalado y en ejecución
 ---
  
 ## Instalación

@@ -55,33 +55,30 @@ sudo docker exec -it hermes-gateway /bin/bash
 hermes setup
 ```
  
-Seguir estos pasos en el asistente:
+Configurar Model Provider:
  
 | Paso | Opción a seleccionar |
 |------|----------------------|
 | Tipo de setup | `Full Setup` |
 | Proveedor LLM | _(seleccionar según preferencia)_ |
 | Modo de instalación | `Keep Current (local)` |
-| Gateway | `Microsoft Teams` |
- 
-### 6. Ingresar credenciales de Azure
- 
-Cuando se soliciten, ingresar los siguientes valores de tu **Azure Bot Service**:
- 
+
+ -- Skip al resto de las opciones 
+
+### 6. Ejecutar configuracion Gateway
+
+```bash
+hermes gateway setup
 ```
+
+### 7. Ingresar credenciales de Azure
+
+Cuando se soliciten, ingresar los siguientes valores de tu Azure Bot Service:
+
 CLIENT_ID      = <tu client id>
 CLIENT_SECRET  = <tu client secret>
 TENANT_ID      = <tu tenant id>
-```
- 
-### 7. Reiniciar el gateway
- 
-Confirmar el reinicio cuando se solicite: `Y`
- 
-Omitir el resto de las opciones.
- 
----
- 
+
 ## Exposición pública con ngrok
  
 Para que Azure Bot Service pueda alcanzar el gateway local, se necesita un túnel HTTPS.

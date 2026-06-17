@@ -53,16 +53,6 @@ else
     echo "  Docker ya instalado."
 fi
 
-# --- 4. Instalar Hermes Agent en la VM ---
-# echo ""
-# echo "[2/3] Instalando Hermes Agent..."
-# if ! command -v hermes &>/dev/null; then
-#     curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
-#     echo "  Hermes instalado."
-# else
-#     echo "  Hermes ya instalado."
-# fi
-
 # --- 5. Construir imagen Docker con Teams SDK ---
 echo ""
 echo "[3/3] Construyendo imagen hermes-agent-teams:latest..."

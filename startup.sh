@@ -1,10 +1,18 @@
 #!/bin/bash
 # =============================================================================
+# startup.sh — Patagonian Hermes + Teams Gateway
+#
+# Uso:
+#   curl -O https://raw.githubusercontent.com/Niicoph/hermes-script/main/startup.sh
+#   curl -O https://raw.githubusercontent.com/Niicoph/hermes-script/main/Dockerfile.hermes-teams
 #   sudo bash startup.sh
+#
+# Requiere: Ubuntu 24.04+, conectividad a internet
 # =============================================================================
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "$0")" && pwd)"
+export DEBIAN_FRONTEND=noninteractive
 
 echo "=========================================="
 echo "  Patagonian — Hermes + Teams Gateway"
@@ -17,18 +25,23 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-# --- 2. Instalar Docker ---
+# --- 2. Obtener codename de Ubuntu ---
+. /etc/os-release
+UBUNTU_CODENAME="${UBUNTU_CODENAME:-$VERSION_CODENAME}"
+echo "  OS: ${ID} ${UBUNTU_CODENAME} (${VERSION_ID})"
+
+# --- 3. Instalar Docker ---
 echo ""
 echo "[1/2] Instalando Docker..."
 if ! command -v docker &>/dev/null; then
     apt-get update -qq
     apt-get install -y -qq ca-certificates curl
     install -m 0755 -d /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/debian/gpg \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
         -o /etc/apt/keyrings/docker.asc
     chmod a+r /etc/apt/keyrings/docker.asc
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
-https://download.docker.com/linux/debian $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+https://download.docker.com/linux/ubuntu ${UBUNTU_CODENAME} stable" \
         | tee /etc/apt/sources.list.d/docker.list > /dev/null
     apt-get update -qq
     apt-get install -y -qq docker-ce docker-ce-cli containerd.io docker-compose-plugin
@@ -39,7 +52,7 @@ else
     echo "  Docker ya instalado."
 fi
 
-# --- 3. Construir imagen Docker con Teams SDK ---
+# --- 4. Construir imagen Docker con Teams SDK ---
 echo ""
 echo "[2/2] Construyendo imagen hermes-agent-teams:latest..."
 docker build -t hermes-agent-teams:latest \

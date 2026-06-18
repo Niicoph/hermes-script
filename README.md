@@ -71,6 +71,8 @@ Configurar Model Provider:
 hermes gateway setup
 ```
 
+-- Seleccionar Teams
+
 ### 7. Ingresar credenciales de Azure
 
 Cuando se soliciten, ingresar los siguientes valores de tu Azure Bot Service:
